@@ -25,9 +25,7 @@ do
 		for FILENAME in `find "${DIR}" -name "*.${EXT}"`
 		do
 			echo ${FILENAME}
-            		#/bin/nice -n 19 ${FFMPEG} -y -i "${FILENAME}" -threads ${procnum} -strict -2 -f mp4 -vtag mp4v -q:v 4 -q:a 8 "${FILENAME%.${EXT}}.mp4" || continue
-			/bin/nice -n 19 ${FFMPEG} -y -i "${FILENAME}" -threads ${procnum} -c copy "${FILENAME%.${EXT}}.mp4" \
-			|| continue
+			/bin/nice -n 19 ${FFMPEG} -y -i "${FILENAME}" -threads ${procnum} "${FILENAME%.${EXT}}.mp4" || continue
             		rm -f "${FILENAME}"
 		done
 	done
