@@ -1,8 +1,5 @@
 #!/bin/bash
 export IFS=$'\n'
-DIR=$(cd $(dirname $0); pwd)
-cd $DIR
-source ./lock.sh
 DATE=`date +%Y_%m_%d`
 
 argv=("$@")
@@ -13,8 +10,12 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-
-FFMPEG=/usr/local/bin/ffmpeg
+## https://qiita.com/hit/items/e95298f689a1ee70ae4a                                                                                                                                                               
+_pcnt=`pgrep -fo ${CMDNAME} | wc -l`               
+if [ ${_pcnt} -gt 1 ]; then                        
+	echo "This script has been running now. proc : ${_pcnt}"
+	exit 1                                           
+fi
 
 EXTLIST=( "mkv" "wmv.mp4" "flv.mp4" "ts" "mpeg" "mpg" "flv" "rmvb" "wmv" "M4A" "avi" )
 
@@ -27,8 +28,8 @@ do
 		for FILENAME in `find "${DIR}" -name "*.${EXT}" | sort`
 		do
 			echo "${FILENAME}"
-			/bin/nice -n 19 ${FFMPEG} -y -i "${FILENAME}" "${FILENAME%.${EXT}}.mp4" || continue
-            		rm -f "${FILENAME}"
+			nice -n 19 ffmpeg -y -i "${FILENAME}" "${FILENAME%.${EXT}}.mp4" || continue
+      rm -f "${FILENAME}"
 		done
 	done
 done
