@@ -15,19 +15,19 @@ fi
 
 
 FFMPEG=/usr/local/bin/ffmpeg
-#proc=`cat /proc/cpuinfo | grep processor | wc -l`
-#let procnum="${proc} / 2";
-EXTLIST=("mpeg" "mpg" "mkv" "flv" "rmvb" "wmv" "M4A" "avi")
-for DIR in ${argv}
+
+EXTLIST=( "mkv" "wmv.mp4" "flv.mp4" "ts" "mpeg" "mpg" "flv" "rmvb" "wmv" "M4A" "avi" )
+
+for ARG_DIR in ${argv}
 do
+	DIR=`readlink -f ${ARG_DIR}`
 	for EXT in ${EXTLIST[@]}
 	do
+		echo "${EXT}"
 		for FILENAME in `find "${DIR}" -name "*.${EXT}" | sort`
 		do
-			ls -lh ${FILENAME}
-#			/bin/nice -n 19 ${FFMPEG} -y -i "${FILENAME}" -threads ${procnum} "${FILENAME%.${EXT}}.mp4" || continue
+			echo "${FILENAME}"
 			/bin/nice -n 19 ${FFMPEG} -y -i "${FILENAME}" "${FILENAME%.${EXT}}.mp4" || continue
-			ls -lh "${FILENAME%.${EXT}}.mp4"
             		rm -f "${FILENAME}"
 		done
 	done
