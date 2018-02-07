@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 export IFS=$'\n'
 DATE=`date +%Y_%m_%d`
 
@@ -17,7 +17,18 @@ if [ ${_pcnt} -gt 1 ]; then
 	exit 1                                           
 fi
 
-EXTLIST=( "mkv" "wmv.mp4" "flv.mp4" "ts" "mpeg" "mpg" "flv" "rmvb" "wmv" "M4A" "avi" )
+EXTLIST=(
+"mkv"
+"wmv.mp4"
+"flv.mp4"
+"mpeg"
+"mpg"
+"flv"
+"rmvb"
+"wmv"
+"M4A"
+"avi"
+"ts")
 
 for ARG_DIR in ${argv}
 do
@@ -29,7 +40,7 @@ do
 		do
 			echo "${FILENAME}"
 			nice -n 19 ffmpeg -y -i "${FILENAME}" "${FILENAME%.${EXT}}.mp4" || continue
-      rm -f "${FILENAME}"
+      			rm -f "${FILENAME}"
 		done
 	done
 done
