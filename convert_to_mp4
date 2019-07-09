@@ -20,6 +20,8 @@ fi
 EXTLIST=(
 "mov"
 "mkv"
+"..avi"
+"avi.mp4"
 "wmv.mp4"
 "flv.mp4"
 "mpeg"
