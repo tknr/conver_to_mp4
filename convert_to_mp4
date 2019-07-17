@@ -33,6 +33,8 @@ EXTLIST=(
 "avi"
 "ts")
 
+# EXTLIST=`cat /etc/mime.types | grep video | grep -v "#" | grep -v mp4 | tr "\t" " " | tr -s " " | cut -d " " -f 2 | grep -v "/" | sort | uniq`
+
 for ARG_DIR in ${argv}
 do
 	DIR=`readlink -f ${ARG_DIR}`
