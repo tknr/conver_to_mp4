@@ -17,6 +17,8 @@ if [ ${_pcnt} -gt 1 ]; then
 	exit 1                                           
 fi
 
+THREADS=$(( (`cat /proc/cpuinfo | grep processor | wc -l` +1) / 2))
+
 EXTLIST=(
 "mov"
 "mkv"
@@ -44,7 +46,7 @@ do
 		for FILENAME in `find "${DIR}" -name "*.${EXT}" | sort`
 		do
 			echo "${FILENAME}"
-			nice -n 19 ffmpeg -y -i "${FILENAME}" -movflags +faststart -codec:v libx264 -preset:v placebo -acodec aac -b:a 256k "${FILENAME%.${EXT}}.mp4" || continue
+			nice -n 19 ffmpeg -y -i "${FILENAME}" -movflags +faststart -codec:v libx264 -preset:v placebo -threads ${THREADS} -acodec aac -b:a 256k "${FILENAME%.${EXT}}.mp4" || continue
       			rm -f "${FILENAME}"
 		done
 	done
