@@ -17,9 +17,11 @@ if [ ${_pcnt} -gt 1 ]; then
 	exit 1                                           
 fi
 
-THREADS=$(( (`cat /proc/cpuinfo | grep processor | wc -l` +1) / 2))
+THREADS=$(( (`cat /proc/cpuinfo | grep processor | wc -l` +1) / 4))
 
-EXTLIST=(
+EXTLIST=`cat /etc/mime.types | grep -v "#" | grep video | grep -v mp4 | tr "\t" " " | tr -s " " | cut -d " " -f 2 | grep -v "/" | sort | uniq`
+
+EXTLIST+=(
 "mov"
 "mkv"
 "..avi"
@@ -35,7 +37,7 @@ EXTLIST=(
 "avi"
 "ts")
 
-# EXTLIST=`cat /etc/mime.types | grep video | grep -v "#" | grep -v mp4 | tr "\t" " " | tr -s " " | cut -d " " -f 2 | grep -v "/" | sort | uniq`
+EXTLIST=($(echo "${EXTLIST[*]}" | sort | uniq))
 
 for ARG_DIR in ${argv}
 do
