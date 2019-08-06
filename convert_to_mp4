@@ -18,7 +18,7 @@ if [ ${_pcnt} -gt 1 ]; then
 fi
 
 
-THREADS=$(( (`cat /proc/cpuinfo | grep processor | wc -l` +1) / 2))
+THREADS=$(( (`cat /proc/cpuinfo | grep processor | wc -l` +1) / 4))
 FFMEPG_OPTIONS="-movflags +faststart -codec:v libx264 -preset:v veryslow -threads ${THREADS} -acodec aac -b:a 256k"
 
 EXTLIST=`cat /etc/mime.types | grep -v "#" | grep video | grep -v mp4 | tr "\t" " " | tr -s " " | cut -d " " -f 2 | grep -v "/" | sort | uniq`
