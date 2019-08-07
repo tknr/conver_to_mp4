@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/sh -x
 export IFS=$'\n'
 DATE=`date +%Y_%m_%d`
 
