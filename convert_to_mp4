@@ -43,7 +43,6 @@ EXTLIST=($(echo "${EXTLIST[*]}" | sort | uniq))
 
 for ARG_DIR in ${argv}
 do
-#	DIR=`readlink -f ${ARG_DIR}`
 	DIR=$ARG_DIR
 	for EXT in ${EXTLIST[@]}
 	do
