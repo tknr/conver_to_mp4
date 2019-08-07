@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/bash -x
 export IFS=$'\n'
 DATE=`date +%Y_%m_%d`
 
@@ -19,7 +19,6 @@ fi
 
 
 THREADS=$(( (`cat /proc/cpuinfo | grep processor | wc -l` +1) / 4))
-FFMPEG_OPTIONS="-movflags +faststart -codec:v libx264 -preset:v veryslow -threads ${THREADS} -acodec aac -b:a 256k"
 
 EXTLIST=`cat /etc/mime.types | grep -v "#" | grep video | grep -v mp4 | tr "\t" " " | tr -s " " | cut -d " " -f 2 | grep -v "/" | sort | uniq`
 
@@ -50,7 +49,7 @@ do
 		for FILENAME in `find "${DIR}" -name "*.${EXT}" | sort`
 		do
 			echo "${FILENAME}"
-			nice -n 19 ffmpeg -y -i "${FILENAME}" ${FFMPEG_OPTIONS} "${FILENAME%.${EXT}}.mp4" || continue
+			nice -n 19 ffmpeg -y -i "${FILENAME}" -movflags +faststart -codec:v libx264 -preset:v veryslow -threads ${THREADS} -acodec aac -b:a 256k "${FILENAME%.${EXT}}.mp4" || continue
       			rm -f "${FILENAME}"
 		done
 	done
