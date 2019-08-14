@@ -17,11 +17,11 @@ if [ ${_pcnt} -gt 1 ]; then
 	exit 1                                           
 fi
 
-
+##
 THREADS=$(( (`cat /proc/cpuinfo | grep processor | wc -l` +1) / 4))
 
+##
 EXTLIST=`cat /etc/mime.types | grep -v "#" | grep video | grep -v mp4 | tr "\t" " " | tr -s " " | cut -d " " -f 2 | grep -v "/" | sort | uniq`
-
 EXTLIST+=(
 "mov"
 "mkv"
@@ -37,19 +37,18 @@ EXTLIST+=(
 "M4A"
 "avi"
 "ts")
-
 EXTLIST=($(echo "${EXTLIST[*]}" | sort | uniq))
 
+##
 for ARG_DIR in ${argv}
 do
 	DIR=$ARG_DIR
 	for EXT in ${EXTLIST[@]}
 	do
-		echo "${EXT}"
 		for FILENAME in `find "${DIR}" -name "*.${EXT}" | sort`
 		do
 			echo "${FILENAME}"
-			nice -n 19 ffmpeg -y -i "${FILENAME}" -movflags +faststart -codec:v libx264 -preset:v veryslow -threads ${THREADS} -acodec aac -b:a 256k "${FILENAME%.${EXT}}.mp4" || continue
+			nice -n 19 ffmpeg -hide_banner -y -i "${FILENAME}" -movflags +faststart -codec:v libx264 -preset:v veryslow -threads ${THREADS} -acodec aac -b:a 256k "${FILENAME%.${EXT}}.mp4" || continue
       			rm -f "${FILENAME}"
 		done
 	done
