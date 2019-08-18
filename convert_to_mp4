@@ -18,7 +18,33 @@ if [ ${_pcnt} -gt 1 ]; then
 fi
 
 ##
-THREADS=$(( (`cat /proc/cpuinfo | grep processor | wc -l` +1) / 4))
+NICE=19
+THREADS=$(( (`cat /proc/cpuinfo | grep processor | wc -l` +1) / 2))
+PRESET_V=veryslow
+AUDIO_BITRATE=256k
+
+
+## http://takuya-1st.hatenablog.jp/entry/2015/12/24/234238
+while getopts ":nice:threads:preset_v:audio_bitrate" OPT ; do
+        case $OPT in
+                nice)
+                        NICE=$OPTARG
+                ;;
+                threads)
+                        THREADS=$OPTARG
+                ;;
+                preset_v)
+                        PRESET_V=$OPTARG
+                ;;
+                audio_bitrate)
+                        AUDIO_BITRATE=$OPTARG
+                ;;
+                : )
+                ;;
+                \? )
+                ;;
+        esac
+done
 
 ##
 EXTLIST=`cat /etc/mime.types | grep -v "#" | grep video | grep -v mp4 | tr "\t" " " | tr -s " " | cut -d " " -f 2 | grep -v "/" | sort | uniq`
@@ -48,7 +74,7 @@ do
 		for FILENAME in `find "${DIR}" -name "*.${EXT}" | sort`
 		do
 			echo "${FILENAME}"
-			nice -n 19 ffmpeg -hide_banner -y -i "${FILENAME}" -movflags +faststart -codec:v libx264 -preset:v veryslow -threads ${THREADS} -acodec aac -b:a 256k "${FILENAME%.${EXT}}.mp4" || continue
+			nice -n ${NICE} ffmpeg -hide_banner -y -i "${FILENAME}" -movflags +faststart -codec:v libx264 -preset:v ${PRESET_V} -threads ${THREADS} -acodec aac -b:a ${AUDIO_BITRATE} "${FILENAME%.${EXT}}.mp4" || continue
       			rm -f "${FILENAME}"
 		done
 	done
