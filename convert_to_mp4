@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 export IFS=$'\n'
 DATE=`date +%Y_%m_%d`
 
@@ -14,31 +14,35 @@ fi
 
 ##
 NICE=19
-THREADS=$(( (`cat /proc/cpuinfo | grep processor | wc -l` +1) / 2))
+THREADS=$(( (`cat /proc/cpuinfo | grep processor | wc -l` +1) / 4))
 PRESET_V=veryslow
 AUDIO_BITRATE=256k
 
 ##
 if [ $# -eq 0 ]; then
-    echo "Usage : ${CMDNAME} [-n nicevalue] [-t thread count] [-p video preset value] [-a audio bitrate] <dirname>"
+    echo "Usage : ${CMDNAME} [-n nicevalue] [-t thread count] [-p video preset value] [-b audio bitrate] <dirname>"
     exit 1
 fi
 
-## http://takuya-1st.hatenablog.jp/entry/2015/12/24/234238
-while getopts "n: t: p: a:" OPT ; do
-
-        case $OPT in
-                n)
+## https://qiita.com/b4b4r07/items/dcd6be0bb9c9185475bb#%E3%81%84%E3%81%A3%E3%81%9D%E8%87%AA%E5%89%8D%E3%81%A7%E8%A7%A3%E6%9E%90%E3%81%97%E3%81%A1%E3%82%83%E3%81%86
+for OPT in "$@"
+do
+        case "$OPT" in
+                '-n'|'--nice')
                         NICE=$OPTARG
+			shift 2
                 ;;
-                t)
+                '-t'|'--threads')
                         THREADS=$OPTARG
+			shift 2
                 ;;
-                p)
+                '-p'|'--preset')
                         PRESET_V=$OPTARG
+			shift 2
                 ;;
-                a)
+                '-b'|'--bitrate')
                         AUDIO_BITRATE=$OPTARG
+			shift 2
                 ;;
                 : )
                 ;;
@@ -61,7 +65,7 @@ EXTLIST+=(
 "flv"
 "rmvb"
 "wmv"
-"M4A"
+"m4a"
 "avi"
 "ts")
 EXTLIST=($(echo "${EXTLIST[*]}" | sort | uniq))
