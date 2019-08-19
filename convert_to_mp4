@@ -68,6 +68,7 @@ EXTLIST+=(
 "m4a"
 "avi"
 "ts")
+EXTLIST+=($(echo "${EXTLIST[*]^^}" ))
 EXTLIST=($(echo "${EXTLIST[*]}" | sort | uniq))
 
 ##
