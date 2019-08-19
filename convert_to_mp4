@@ -20,23 +20,24 @@ AUDIO_BITRATE=256k
 
 ##
 if [ $# -eq 0 ]; then
-    echo "Usage : ${CMDNAME} [-nice nicevalue] [-threads thread count] [-preset_v preset value] [-audio_bitrate bitrate] <dirname>"
+    echo "Usage : ${CMDNAME} [-n nicevalue] [-t thread count] [-p video preset value] [-a audio bitrate] <dirname>"
     exit 1
 fi
 
 ## http://takuya-1st.hatenablog.jp/entry/2015/12/24/234238
-while getopts ":nice:threads:preset_v:audio_bitrate" OPT ; do
+while getopts "n: t: p: a:" OPT ; do
+
         case $OPT in
-                nice)
+                n)
                         NICE=$OPTARG
                 ;;
-                threads)
+                t)
                         THREADS=$OPTARG
                 ;;
-                preset_v)
+                p)
                         PRESET_V=$OPTARG
                 ;;
-                audio_bitrate)
+                a)
                         AUDIO_BITRATE=$OPTARG
                 ;;
                 : )
@@ -51,7 +52,7 @@ EXTLIST=`cat /etc/mime.types | grep -v "#" | grep video | grep -v mp4 | tr "\t" 
 EXTLIST+=(
 "mov"
 "mkv"
-"..avi"
+".avi"
 "avi.mp4"
 "wmv.mp4"
 "flv.mp4"
