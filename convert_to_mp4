@@ -16,7 +16,7 @@ fi
 NICE=19
 THREADS=$(( (`cat /proc/cpuinfo | grep processor | wc -l` +1) / 4))
 PRESET_V=veryslow
-AUDIO_BITRATE=256k
+AUDIO_BITRATE=192k
 
 ##
 if [ $# -eq 0 ]; then
