@@ -17,6 +17,8 @@ NICE=19
 THREADS=$(( (`cat /proc/cpuinfo | grep processor | wc -l` +1) / 4))
 PRESET_V=placebo
 AUDIO_BITRATE=192k
+TARGET_DIR="."
+
 
 ##
 if [ $# -eq 0 ]; then
@@ -29,25 +31,25 @@ for OPT in "$@"
 do
         case "$OPT" in
                 '-n'|'--nice')
-                        NICE=$OPTARG
+                        NICE=$2
 			shift 2
                 ;;
                 '-t'|'--threads')
-                        THREADS=$OPTARG
+                        THREADS=$2
 			shift 2
                 ;;
                 '-p'|'--preset')
-                        PRESET_V=$OPTARG
+                        PRESET_V=$2
 			shift 2
                 ;;
                 '-b'|'--bitrate')
-                        AUDIO_BITRATE=$OPTARG
+                        AUDIO_BITRATE=$2
 			shift 2
                 ;;
-                : )
-                ;;
-                \? )
-                ;;
+		'-d'|'--dir')
+			TARGET_DIR=$2
+			shift 2
+		;;
         esac
 done
 
@@ -73,16 +75,13 @@ EXTLIST+=($(echo "${EXTLIST[*]^^}" ))
 EXTLIST=($(echo "${EXTLIST[*]}" | sort | uniq))
 
 ##
-for ARG_DIR in ${argv}
+for EXT in ${EXTLIST[@]}
 do
-	DIR=$ARG_DIR
-	for EXT in ${EXTLIST[@]}
+	for FILENAME in `find "${TARGET_DIR}" -name "*.${EXT}" | sort`
 	do
-		for FILENAME in `find "${DIR}" -name "*.${EXT}" | sort`
-		do
-			echo "${FILENAME}"
-			nice -n ${NICE} ffmpeg -hide_banner -y -i "${FILENAME}" -movflags +faststart -codec:v libx264 -preset:v ${PRESET_V} -threads ${THREADS} -acodec aac -b:a ${AUDIO_BITRATE} "${FILENAME%.${EXT}}.mp4" || continue
-      			rm -f "${FILENAME}"
-		done
+		ls -l "${FILENAME}"
+		nice -n ${NICE} ffmpeg -hide_banner -y -i "${FILENAME}" -movflags +faststart -codec:v libx264 -preset:v ${PRESET_V} -threads ${THREADS} -acodec aac -b:a ${AUDIO_BITRATE} "${FILENAME%.${EXT}}.mp4" || continue
+		ls -l "${FILENAME%.${EXT}}.mp4"
+      		rm -f "${FILENAME}"
 	done
 done
