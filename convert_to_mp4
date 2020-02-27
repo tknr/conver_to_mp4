@@ -22,7 +22,7 @@ TARGET_DIR="."
 
 ##
 if [ $# -eq 0 ]; then
-    echo "Usage : ${CMDNAME} [-n nicevalue] [-t thread count] [-p video preset value] [-b audio bitrate] <dirname>"
+    echo "Usage : ${CMDNAME} [-n nicevalue] [-t thread count] [-p video preset value] [-b audio bitrate] [-d dirname]"
     exit 1
 fi
 
