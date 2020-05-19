@@ -57,7 +57,7 @@ done
 EXTLIST=`cat /etc/mime.types | grep -v "#" | grep video | grep -v mp4 | grep -v mkv | grep -v avi | tr "\t" " " | tr -s " " | cut -d " " -f 2 | grep -v "/" | sort | uniq`
 EXTLIST+=(
 "mov"
-#"avi.mp4"
+"avi.mp4"
 "wmv.mp4"
 "flv.mp4"
 "mpeg"
@@ -67,6 +67,7 @@ EXTLIST+=(
 "wmv"
 "m4a"
 "avi"
+"AVI"
 "ts"
 "webm"
 )
@@ -76,7 +77,7 @@ EXTLIST=($(echo "${EXTLIST[*]}" | sort | uniq))
 ##
 for EXT in ${EXTLIST[@]}
 do
-	for FILENAME in `find "${TARGET_DIR}" -iname "*.${EXT}" | sort`
+	for FILENAME in `find "${TARGET_DIR}" -name "*.${EXT}" | sort`
 	do
 		ls -l "${FILENAME}"
 		nice -n ${NICE} ffmpeg -hide_banner -y -i "${FILENAME}" -movflags +faststart -codec:v libx264 -preset:v ${PRESET_V} -threads ${THREADS} -acodec aac -b:a ${AUDIO_BITRATE} -aac_coder twoloop "${FILENAME%%%.${EXT}}.mp4" || continue
