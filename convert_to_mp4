@@ -57,7 +57,7 @@ done
 EXTLIST=`cat /etc/mime.types | grep -v "#" | grep video | grep -v mp4 | grep -v mkv | grep -v avi | tr "\t" " " | tr -s " " | cut -d " " -f 2 | grep -v "/" | sort | uniq`
 EXTLIST+=(
 "mov"
-"avi.mp4"
+#"avi.mp4"
 "wmv.mp4"
 "flv.mp4"
 "mpeg"
