@@ -68,7 +68,10 @@ EXTLIST+=(
 "m4a"
 "avi"
 "AVI"
+"MPG"
+"MPEG"
 "ts"
+"TS"
 "webm"
 )
 EXTLIST+=($(echo "${EXTLIST[*]^^}" ))
