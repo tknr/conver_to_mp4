@@ -83,7 +83,7 @@ do
 	for FILENAME in `find "${TARGET_DIR}" -name "*.${EXT}" | sort`
 	do
 		ls -l "${FILENAME}"
-		nice -n ${NICE} ffmpeg -hide_banner -y -i "${FILENAME}" -movflags +faststart -codec:v libx264 -preset:v ${PRESET_V} -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -threads ${THREADS} -acodec aac -b:a ${AUDIO_BITRATE} -aac_coder twoloop "${FILENAME%.${EXT}}.mp4" || continue
+		nice -n ${NICE} ffmpeg -hide_banner -y -i "${FILENAME}" -movflags +faststart -codec:v libx264 -preset:v ${PRESET_V} -vf "pad=ceil(iw/2)*2:ceil(ih/2)*2" -threads ${THREADS} -acodec aac -b:a ${AUDIO_BITRATE} -aac_coder twoloop "${FILENAME%.${EXT}}.mp4" || continue
 		ls -l "${FILENAME%.${EXT}}.mp4"
       		rm -f "${FILENAME}"
 	done
